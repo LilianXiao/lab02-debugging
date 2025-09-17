@@ -1,5 +1,23 @@
 # lab02-debugging
 
+# Debugging Log
+Link: https://www.shadertoy.com/view/wflfWf
+
+mainImage:
+- vec uv2 syntax error, should be vec2 uv
+- raycast should use new uv2 instead of old uv
+Found these out because shadertoy shows an error under syntax errors, but also because checking mainImage to me is the highest level before looking into more specific things.
+
+raycast:
+- H *= len * iResolution.x / iResolution.y (originally dividing by iResolution.x)
+The spheres are all stretched so I assumed something would be going on with the SDF or raycast.  After checking raycast I located this bug.
+
+march:
+- Noticed that there simply wasn't enough floor, and there was a strange warping effect around the spheres and floor!!  So I looked at march and first increased the m value, and while this minorly helped it also had the effect of "expanding" everything being rendered, so I decided that probably wasn't the fix.  Then I realized that I could just increase the i bound to increase steps, so I increased it from 64 to 200 and that seems to have solved things!
+
+sdf3D:
+- From the current spheres and floor, clearly the reflection wasn't working, so I looked into the specular reflection calculation.  I wasn't sure where to look though so I enlisted the help of Niko, who then directed me to more closely scrutinize how the direction vector was being calculated.  I then realized that there is no point in using eye, since dir is the direction of the first ray.  I changed it to dir = reflect(dir, nor).
+
 # Setup 
 
 Create a [Shadertoy account](https://www.shadertoy.com/). Either fork this shadertoy, or create a new shadertoy and copy the code from the [Debugging Puzzle](https://www.shadertoy.com/view/flGfRc).
